@@ -19,7 +19,7 @@ CellART Manuscript
 
 coming soon...
 
-CellART Installation & Usage
+CellART Installation & Usage & Demo
 ------------------
 
 .. toctree::
@@ -27,3 +27,5 @@ CellART Installation & Usage
 
    installation 
    usage
+   tutorials/visiumhd_crc
+   tutorials/xenium_crc

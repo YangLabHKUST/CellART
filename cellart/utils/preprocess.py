@@ -153,7 +153,7 @@ class VisiumHDPreprocessor:
                           labels_key="cell_id",
                           )
 
-    def preprare_sst(self, filtered_gene_list, cell_col = "cell_id", cores = 20):
+    def prepare_sst(self, filtered_gene_list, cell_col = "cell_id", cores = 20):
         adata_st = self.adata.copy()
         adata_st.var_names_make_unique()
         adata_st = adata_st[:, filtered_gene_list]
@@ -302,7 +302,7 @@ class XeniumPreprocessor:
         # Save
         save_array(nuclei_mask_whole.astype(np.uint32), os.path.join(self.save_path, f"segmentation_mask_{process_id}.npy"))
 
-    def preprare_sst(self, filtered_gene_list, cores = 20):
+    def prepare_sst(self, filtered_gene_list, cores = 20):
         # Prepare all patches
         n_processes = cores
         gene_names_chunks = np.array_split(filtered_gene_list, n_processes)

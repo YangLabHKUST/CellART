@@ -49,7 +49,7 @@ sc_preprocessor = SingleCellPreprocessor(sc_adata, celltype_col = "celltype", sa
 # If you are using Xenium 5K, please using hvg options like in VisiumHD
 sc_preprocessor.preprocess()
 
-st_preprocessor.preprare_sst(load_list(save_dir + "/filtered_gene_names.txt"))
+st_preprocessor.prepare_sst(load_list(save_dir + "/filtered_gene_names.txt"))
 st_preprocessor.get_nuclei_segmentation()
 ```
 
@@ -84,7 +84,7 @@ sc_preprocessor = SingleCellPreprocessor(sc_adata, celltype_col = "celltype", sa
 # Selecting highly variable genes 2000 / 3000
 sc_preprocessor.preprocess(hvg_method="seurat_v3", n_hvg=3000)
 
-st_preprocessor.preprare_sst(load_list(save_dir + "/filtered_gene_names.txt"))
+st_preprocessor.prepare_sst(load_list(save_dir + "/filtered_gene_names.txt"))
 ```
 
 ---
@@ -247,7 +247,7 @@ manager = cellart.ExperimentManager(
 
     # Training parameters (adjust based on convergence and wandb visualization)
     epoch=200, 
-    seg_training_epochs=5,
+    seg_training_epochs=10,
     deconv_warmup_epochs=100,
 
     pred_period=50,
@@ -290,7 +290,7 @@ The appropriate epoch number for training the CellART model may vary depending o
    For datasets with simpler cell type compositions (e.g., fewer subtypes), the model typically converges faster. In these cases, you can use lower epoch numbers:
    ```python
    epoch = 200
-   seg_training_epochs = 5
+   seg_training_epochs = 10
    deconv_warmup_epochs = 100
    ```
 
@@ -303,5 +303,3 @@ After training, the results will be stored in the `log_dir` directory. Key outpu
 
 - **epoch_{PRED_EPOCH}/cell_deconv.h5ad**: An [Annotated data](https://anndata.readthedocs.io/en/stable/) file containing segmentation and cell type annotation results.
 - **new_segmentation_mask.npy**: A numpy file with the updated segmentation mask, where cell IDs correspond to the `obs_names` in the `cell_deconv.h5ad` file.
-
-
