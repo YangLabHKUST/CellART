@@ -29,3 +29,14 @@ CellART Installation & Usage
    usage
 
 CellART Tutorials
+
+------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   notebooks/Human-Heart 
+   notebooks/Mouse-Brain 
+   notebooks/Mouse-Cerebellum-Slideseq
+   notebooks/Mouse-MOp-MERFISH
+   notebooks/Human-Heart-CCell-interaction
