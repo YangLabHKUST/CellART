@@ -3,10 +3,10 @@
 # -- Project information
 
 project = 'CellART'
-# copyright = '2025, Graziella'
-# author = 'Graziella'
+copyright = '2025, Yuheng Chen'
+author = 'Yuheng Chen'
 
-release = '0.1'
+release = '0.1.0'
 version = '0.1.0'
 
 # -- General configuration

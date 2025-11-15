@@ -1,22 +1,31 @@
-Welcome to Lumache's documentation!
+CellART
 ===================================
 
-**Lumache** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
+CellART is a unified framework for extracting single-cell information from high-resolution ST data. The
+primary objectives are to accurately delineate boundaries for individual cells and further annotate their
+cell types.  By integrating deep neural networks with probabilistic models, CellART leverages multimodal data, including
+spatial transcriptomics, staining images, and scRNA-seq references, to perform simultaneous cell segmentation and cell type annotation, thereby optimizing the analytical process.
 
-Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
+.. image:: method.jpg
+   :width: 800
+   :align: center
 
 .. note::
 
    This project is under active development.
 
-Contents
---------
+CellART Manuscript
+------------------
+
+coming soon...
+
+CellART Installation & Usage
+------------------
 
 .. toctree::
+   :maxdepth: 2
 
+   installation 
    usage
-   api
+
+CellART Tutorials
