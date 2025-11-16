@@ -1,5 +1,5 @@
 # CelLART
-A unified framework for extracting single- cell information from high-resolution spatial transcriptomics
+A unified framework for extracting single-cell information from high-resolution spatial transcriptomics
 
 ![CellART](https://github.com/YangLabHKUST/CellART/blob/main/docs/source/method.jpg)
 
