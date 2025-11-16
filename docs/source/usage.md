@@ -2,7 +2,27 @@
 
 This comprehensive guide provides a detailed explanation of how to preprocess and run CellART, a framework for extracting single-cell information from high-resolution spatial transcriptomics (ST) datasets. 
 
+> **_NOTE:_** You can check the examples of running CellART on [Xenium CRC dataset](https://cellart.readthedocs.io/en/latest/tutorials/xenium_crc.html) and [VisiumHD CRC dataset](https://cellart.readthedocs.io/en/latest/tutorials/visiumhd_crc.html) for practical demonstrations of its usage.
 
+
+
+## Preprocessing
+
+### Input Requirements
+For CellART, the following inputs are necessary:
+
+1. **Raw Data from Spatial Transcriptomics Platforms**:
+   - **Spatial Transcriptomics Data**: Typically provided as a table containing transcript information (gene counts) and their spatial coordinates.
+   - **Staining Images**: DAPI or H&E images, which need to be aligned with the transcriptomics data during preprocessing.
+
+2. **scRNA-seq Reference Dataset**:
+   - A reference dataset containing cell type annotations paired with the ST data.
+
+### Standardized Input Format
+After preprocessing, the raw data is converted into the following standardized format required by CellART:
+- **Gene Map**: A 3D array of shape `H×W×G`, where `H` and `W` are the spatial dimensions, and `G` is the number of unique genes. For platforms such as **VisiumHD**, highly variable genes (HVGs) are selected from the scRNA-seq reference. For other platforms, the intersection of genes between ST and scRNA datasets is used. The resolution is typically set to 1 or 2 µm.
+- **Nuclei Segmentation Mask**: A 2D array of shape `H×W`, where each pixel is labeled as `0` for background or assigned a unique cell ID. This mask can be generated using tools such as **Cellpose** or **StarDist**, or directly obtained from the raw dataset.
+- **Basis Matrix**: A matrix of shape `C×G`, where `C` is the number of cell types and `G` is the number of genes. This matrix describes the gene expression signatures for each cell type and is derived from the scRNA-seq reference.
 
 
 
