@@ -12,8 +12,10 @@ $ conda activate cellart
 $ pip install cellart
 ```
 
+> **_NOTE:_**  Due to differences in GPU models and CUDA versions, you may need to manually reinstall PyTorch and Tensorflow to ensure compatibility. CellART relies heavily on GPU acceleration for efficient processing of large-scale spatial transcriptomics datasets.
+
+
 ### Installing from GitHub
-To install the latest version of CellART, you can clone the repository from GitHub and install it manually.
 
 ```shell
 # Clone the repository
