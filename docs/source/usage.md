@@ -2,7 +2,7 @@
 
 This comprehensive guide provides a detailed explanation of how to preprocess and run CellART, a framework for extracting single-cell information from high-resolution spatial transcriptomics (ST) datasets. 
 
-**_NOTE:_** You can check the examples of running CellART on [Xenium CRC dataset](https://cellart.readthedocs.io/en/latest/tutorials/xenium_crc.html) and [VisiumHD CRC dataset](https://cellart.readthedocs.io/en/latest/tutorials/visiumhd_crc.html) for practical demonstrations of its usage.
+**NOTE:** You can check the examples of running CellART on [Xenium CRC dataset](https://cellart.readthedocs.io/en/latest/tutorials/xenium_crc.html) and [VisiumHD CRC dataset](https://cellart.readthedocs.io/en/latest/tutorials/visiumhd_crc.html) for practical demonstrations of its usage.
 
 
 
