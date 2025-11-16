@@ -278,16 +278,16 @@ model.train_model(dataset)
 The appropriate epoch number for training the CellART model may vary depending on the complexity of the dataset. Below are general guidelines for selecting the epoch parameters:
 
 1. **Large and Complex Datasets**:
-   For datasets with diverse cell types or complex gene expression patterns, use higher epoch numbers to ensure sufficient training:
+   For datasets with diverse cell types or complex gene expression patterns (like more than 3K genes selected), use higher epoch numbers to ensure sufficient training:
    ```python
-   epoch = 500
-   seg_training_epochs = 10
-   deconv_warmup_epochs = 150
+   epoch = 400
+   seg_training_epochs = 15
+   deconv_warmup_epochs = 200
    ```
    Use the `wandb` package to monitor the training process, visualize the annotation results, and evaluate whether they meet expectations. If convergence is achieved earlier than expected, you can terminate training prematurely and check the results.
 
 2. **Simpler Datasets**:
-   For datasets with simpler cell type compositions (e.g., fewer subtypes), the model typically converges faster. In these cases, you can use lower epoch numbers:
+   For datasets with simpler cell type compositions (e.g., fewer subtypes, fewer gene number), the model typically converges faster. In these cases, you can use lower epoch numbers:
    ```python
    epoch = 200
    seg_training_epochs = 10
