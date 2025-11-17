@@ -5,7 +5,7 @@ import scanpy as sc
 import pandas as pd
 import numpy as np
 import scipy
-from utils.io import save_list, save_array
+from .io import save_list, save_array
 from scipy.sparse import coo_matrix
 
 from tqdm import tqdm

@@ -1,7 +1,7 @@
 from setuptools import Command, find_packages, setup
 
 __lib_name__ = "cellart"
-__lib_version__ = "0.0.57"
+__lib_version__ = "0.0.61"
 __description__ = "CellART: a unified framework for extracting single-cell information from high-resolution spatial transcriptomics"
 __url__ = "https://github.com/YangLabHKUST/cellart"
 __author__ = "Yuheng Chen"

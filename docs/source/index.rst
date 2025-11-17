@@ -29,3 +29,11 @@ CellART Installation & Usage & Demo
    usage
    tutorials/visiumhd_crc
    tutorials/xenium_crc
+
+Reproduce CellART Results
+------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/figure_2
