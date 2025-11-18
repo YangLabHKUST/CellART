@@ -6,6 +6,7 @@ This comprehensive guide provides a detailed explanation of how to preprocess an
 
 
 
+
 ## Preprocessing
 
 ### Input Requirements
@@ -226,6 +227,8 @@ After preprocessing (or manually converting raw data into the required format), 
 - **celltype_names.txt**: A text file listing the cell type names matching the order of the `C` channel in `basis.npy`.
 
 Once the preprocessing is complete, you can run CellART using the following script:
+
+> **_NOTE:_** It is **highly recommended** to register an account with [Weights & Biases (wandb)](https://wandb.ai/) and use it to monitor the training and analysis process in CellART. Wandb provides a powerful platform for tracking experiments
 
 ```python
 import cellart
