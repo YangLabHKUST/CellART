@@ -37,3 +37,4 @@ Reproduce CellART Results
    :maxdepth: 1
 
    tutorials/figure_2
+   tutorials/figure_3
