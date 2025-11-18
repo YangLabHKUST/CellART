@@ -38,3 +38,6 @@ Reproduce CellART Results
 
    tutorials/figure_2
    tutorials/figure_3
+   tutorials/figure_4
+   tutorials/figure_5
+   tutorials/figure_6

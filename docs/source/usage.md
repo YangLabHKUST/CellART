@@ -282,7 +282,7 @@ model.train_model(dataset)
 
 The appropriate epoch number for training the CellART model may vary depending on the complexity of the dataset. Below are general guidelines for selecting the epoch parameters:
 
-1. **Large and Complex Datasets**:
+1. **Large and Complex Datasets (default setting for most of the datasets in paper)**:
    For datasets with diverse cell types or complex gene expression patterns (like more than 3K genes selected), use higher epoch numbers to ensure sufficient training:
    ```python
    epoch = 400

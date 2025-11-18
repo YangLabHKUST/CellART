@@ -1,4 +1,5 @@
 import os
+os.environ["OPENCV_IO_MAX_IMAGE_PIXELS"] = pow(2,40).__str__()
 import bin2cell as b2c
 import cv2
 import scanpy as sc
