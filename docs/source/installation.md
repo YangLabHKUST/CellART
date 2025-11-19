@@ -27,6 +27,3 @@ $ cd CellART
 # Install the package
 $ pip install .
 ```
-
-### Note
-CellART relies on deep learning frameworks such as PyTorch and TensorFlow for its core operations. Before installing CellART, ensure that the required version of PyTorch or TensorFlow is compatible with your system's hardware (e.g., CUDA support for GPU acceleration).

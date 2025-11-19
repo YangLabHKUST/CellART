@@ -63,6 +63,10 @@ st_preprocessor.get_nuclei_segmentation()
 ### VisiumHD
 For VisiumHD, the following example demonstrates how to preprocess data:
 ```python
+import os
+# Modify the max image pixels limit for large images
+os.environ["OPENCV_IO_MAX_IMAGE_PIXELS"] = pow(2,40).__str__()
+import cv2
 from cellart.utils.preprocess import SingleCellPreprocessor, VisiumHDPreprocessor
 from cellart.utils.io import load_list
 import scanpy as sc
