@@ -1,4 +1,4 @@
-# CelLART
+# CellART
 A unified framework for extracting single-cell information from high-resolution spatial transcriptomics
 
 [![pypi](https://img.shields.io/pypi/v/cellart.svg)](https://pypi.python.org/pypi/cellart/)
