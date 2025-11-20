@@ -12,6 +12,8 @@ License](https://img.shields.io/github/license/YangLabHKUST/CellART)
 stars](https://img.shields.io/github/stars/YangLabHKUST/CellART) ![GitHub
 forks](https://img.shields.io/github/forks/YangLabHKUST/CellART)
 
+CellART is a unified framework for extracting single-cell information from high-resolution ST data. The primary objectives are to accurately delineate boundaries for individual cells and further annotate their cell types. By integrating deep neural networks with probabilistic models, CellART leverages multimodal data, including spatial transcriptomics, staining images, and scRNA-seq references, to perform simultaneous cell segmentation and cell type annotation, thereby optimizing the analytical process.
+
 <figure>
 
 <img src="docs/source/method.jpg" style="width:95.0%"
@@ -52,8 +54,8 @@ $ pip install .
 
 ## Real data examples
 
-- [Xenium CRC dataset](https://cellart.readthedocs.io/en/latest/tutorials/xenium_crc.html)
-- [VisiumHD CRC dataset](https://cellart.readthedocs.io/en/latest/tutorials/visiumhd_crc.html)
+- [Segment and annotate Xenium CRC dataset from raw data](https://cellart.readthedocs.io/en/latest/tutorials/xenium_crc.html)
+- [Segment and annotate VisiumHD CRC dataset from raw data](https://cellart.readthedocs.io/en/latest/tutorials/visiumhd_crc.html)
 
 
 ## Reference

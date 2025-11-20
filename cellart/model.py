@@ -711,7 +711,11 @@ class CellARTModel(nn.Module):
                     mini_feat[i] = feature_map_pad[:, cy - half_size:cy + half_size, cx - half_size:cx + half_size]
                     mini_nucl[i] = binary_masks_pad[i, cy - half_size:cy + half_size, cx - half_size:cx + half_size]
                 # print(f"N: {N}, H: {H}, W: {W}, binary_masks_chunk: {binary_masks_chunk.shape}, mini_nucl: {mini_nucl.shape}")
-                soft_masks = np.zeros((len(mini_nucl), mini_nucl[0].shape[0], mini_nucl[0].shape[1]))
+                try:
+                    soft_masks = np.zeros((len(mini_nucl), mini_nucl[0].shape[0], mini_nucl[0].shape[1]))
+                except:
+                    # Zero cell in this chunk
+                    continue
                 for c in range(len(mini_nucl)):
                     cell_nuclei_mask = mini_nucl[c]
                     cell_nuclei_mask = cell_nuclei_mask.cpu().numpy()
