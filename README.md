@@ -8,9 +8,13 @@ size](https://img.shields.io/github/repo-size/YangLabHKUST/CellART)
 commit](https://img.shields.io/github/last-commit/YangLabHKUST/CellART)
 ![GitHub
 License](https://img.shields.io/github/license/YangLabHKUST/CellART)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17922226.svg)](https://doi.org/10.5281/zenodo.17922226)
+
 ![GitHub Repo
-stars](https://img.shields.io/github/stars/YangLabHKUST/CellART) ![GitHub
+stars](https://img.shields.io/github/stars/YangLabHKUST/CellART) 
+![GitHub
 forks](https://img.shields.io/github/forks/YangLabHKUST/CellART)
+
 
 CellART is a unified framework for extracting single-cell information from high-resolution ST data. The primary objectives are to accurately delineate boundaries for individual cells and further annotate their cell types. By integrating deep neural networks with probabilistic models, CellART leverages multimodal data, including spatial transcriptomics, staining images, and scRNA-seq references, to perform simultaneous cell segmentation and cell type annotation, thereby optimizing the analytical process.
 
@@ -21,7 +25,7 @@ alt="Pipeline" />
 </figure>
 
 
-Visit our [documentation](https://cellart.readthedocs.io/en/latest/) for installation, examples and reproducing the results in our paper. All the data files for reproducing the result are deposited at 
+Visit our [documentation](https://cellart.readthedocs.io/en/latest/) for installation, examples and reproducing the results in our paper. All the data files for reproducing the result are deposited at [Zenodo](https://doi.org/10.5281/zenodo.17922226).
 
 ## Installation
 
