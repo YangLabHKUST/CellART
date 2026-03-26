@@ -77,6 +77,7 @@ class ExperimentManager(object):
         parser.add_argument('--save_period', type=int, default=100, help="save period")
         parser.add_argument('--pred_period', type=int, default=100, help="log period")
         parser.add_argument('--save_pixel_feature', action='store_true', help="save pixel feature (If is true, the predicting process will be slow)")
+        parser.add_argument('--save_seg_prob', action='store_true', help="save per-patch segmentation probabilities (cell_probs and cell_ids per patch)")
 
 
         parser.add_argument('--epochs', type=int, default=400, help="number of epochs for training")
@@ -91,6 +92,11 @@ class ExperimentManager(object):
         # NMF
         parser.add_argument('--nmf', action='store_true', help="use NMF model")
         parser.add_argument('--factor_num', type=int, default=10, help="factor number for NMF")
+
+        # Likelihood
+        parser.add_argument('--likelihood', type=str, default="poisson",
+                            choices=["poisson", "nb", "zip", "zinb", "tweedie"],
+                            help="likelihood distribution for deconvolution loss")
 
         # Environment options
         parser.add_argument('--gpu', type=str, default="0", help="gpu device id")

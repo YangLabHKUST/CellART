@@ -58,13 +58,15 @@ class CellARTModel(nn.Module):
         self.fpn = model_fpn[1:].to(self.device)
 
         if not self.opt.nmf:
-            print("=======> Cellsegmentation + CellAnnotation")
+            print(f"=======> Cellsegmentation + CellAnnotation (likelihood: {self.opt.likelihood})")
             self.deconv = DeconvNetPerSpotPatchEffect(gene_num=self.gene_num, hidden_dims=self.opt.deconv_emb_dim,
-                                n_celltypes=self.basis.shape[0], patch_num=self.patch_num).to(self.device)
+                                n_celltypes=self.basis.shape[0], patch_num=self.patch_num,
+                                likelihood=self.opt.likelihood).to(self.device)
             if self.opt.no_patch_effect:
                 print("=======> No Patch Effect")
                 self.deconv = DeconvNetNoPatchEffect(gene_num=self.gene_num, hidden_dims=self.opt.deconv_emb_dim,
-                                n_celltypes=self.basis.shape[0], patch_num=self.patch_num).to(self.device)
+                                n_celltypes=self.basis.shape[0], patch_num=self.patch_num,
+                                likelihood=self.opt.likelihood).to(self.device)
         else:
             print("=======> Cellsegmentation + NMF")
             self.deconv = NMFNet(gene_num=self.gene_num, hidden_dims=self.opt.deconv_emb_dim,
@@ -443,7 +445,7 @@ class CellARTModel(nn.Module):
 
         # if nmf: save basis
         if self.opt.nmf:
-            adata.uns['basis'] = self.deconv.get_basis().cpu().numpy()
+            adata.uns['basis'] = self.deconv.get_basis().detach().cpu().numpy()
         else:
             adata.uns['basis'] = self.basis.cpu().numpy()
 
@@ -573,6 +575,9 @@ class CellARTModel(nn.Module):
                         f"Epoch: {e}, Iter: {ite}, Cell chunk: {cell_chunk}, Loss_nucl: {torch.sum(loss_nucl) / torch.sum(loss_mask)}")
 
         self.logger.info("=======> Training done, Start predicting new cell segmentation mask")
+        if self.opt.save_seg_prob:
+            seg_prob_dir = self.manager.get_log_dir() + '/seg_prob'
+            os.makedirs(seg_prob_dir, exist_ok=True)
         all_border_nucl_id = []
         new_segmentation_mask_dict = {}
         for ite, batch in enumerate(train_loader):
@@ -645,6 +650,9 @@ class CellARTModel(nn.Module):
             # Concat cell and background
             cell_probs = np.concatenate([bgd_probs[np.newaxis], pred_probs], axis=0)
             final_seg = np.argmax(cell_probs, axis=0)
+            if self.opt.save_seg_prob:
+                np.savez(seg_prob_dir + f'/off_{coords_h1[0]}_{coords_w1[0]}_seg_prob.npz',
+                         cell_probs=cell_probs, cell_ids=cell_ids.cpu().numpy())
             # Make prediciton projection to the original nucl index
             dictionary = dict(
                 zip(np.arange(0, len(cell_ids) + 1), torch.cat([torch.tensor([0]), cell_ids.cpu()]).numpy()))
@@ -741,6 +749,9 @@ class CellARTModel(nn.Module):
             # Concat cell and background
             cell_probs = np.concatenate([bgd_probs[np.newaxis], pred_probs], axis=0)
             final_seg = np.argmax(cell_probs, axis=0)
+            if self.opt.save_seg_prob:
+                np.savez(seg_prob_dir + f'/vertical_{coords_h1[0]}_{coords_w1[0]}_seg_prob.npz',
+                         cell_probs=cell_probs, cell_ids=cell_ids.cpu().numpy())
             # Make prediciton projection to the original nucl index
             dictionary = dict(
                 zip(np.arange(0, len(cell_ids) + 1), torch.cat([torch.tensor([0]), cell_ids.cpu()]).numpy()))
@@ -834,6 +845,9 @@ class CellARTModel(nn.Module):
             # Concat cell and background
             cell_probs = np.concatenate([bgd_probs[np.newaxis], pred_probs], axis=0)
             final_seg = np.argmax(cell_probs, axis=0)
+            if self.opt.save_seg_prob:
+                np.savez(seg_prob_dir + f'/horizontal_{coords_h1[0]}_{coords_w1[0]}_seg_prob.npz',
+                         cell_probs=cell_probs, cell_ids=cell_ids.cpu().numpy())
             # Make prediciton projection to the original nucl index
             dictionary = dict(
                 zip(np.arange(0, len(cell_ids) + 1), torch.cat([torch.tensor([0]), cell_ids.cpu()]).numpy()))
