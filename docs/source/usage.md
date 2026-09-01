@@ -16,14 +16,15 @@ For CellART, the following inputs are necessary:
    - **Spatial Transcriptomics Data**: Typically provided as a table containing transcript information (gene counts) and their spatial coordinates.
    - **Staining Images**: DAPI or H&E images, which need to be aligned with the transcriptomics data during preprocessing.
 
-2. **scRNA-seq Reference Dataset**:
+2. **scRNA-seq Reference Dataset** (optional):
    - A reference dataset containing cell type annotations paired with the ST data.
+   - If no paired reference is available, CellART can run in **NMF mode** (see [Running CellART without a Reference (NMF Mode)](#running-cellart-without-a-reference-nmf-mode) below).
 
 ### Standardized Input Format
 After preprocessing, the raw data is converted into the following standardized format required by CellART:
 - **Gene Map**: A 3D array of shape `H×W×G`, where `H` and `W` are the spatial dimensions, and `G` is the number of unique genes. For platforms such as **VisiumHD**, highly variable genes (HVGs) are selected from the scRNA-seq reference. For other platforms, the intersection of genes between ST and scRNA datasets is used. The resolution is typically set to 1 or 2 µm.
 - **Nuclei Segmentation Mask**: A 2D array of shape `H×W`, where each pixel is labeled as `0` for background or assigned a unique cell ID. This mask can be generated using tools such as **Cellpose** or **StarDist**, or directly obtained from the raw dataset.
-- **Basis Matrix**: A matrix of shape `C×G`, where `C` is the number of cell types and `G` is the number of genes. This matrix describes the gene expression signatures for each cell type and is derived from the scRNA-seq reference.
+- **Basis Matrix**: A matrix of shape `C×G`, where `C` is the number of cell types and `G` is the number of genes. This matrix describes the gene expression signatures for each cell type and is derived from the scRNA-seq reference. (Not required in NMF mode, where the basis is learned from the data.)
 
 
 
@@ -255,7 +256,7 @@ manager = cellart.ExperimentManager(
     log_dir=log_dir,
 
     # Training parameters (adjust based on convergence and wandb visualization)
-    epoch=200, 
+    epochs=200, 
     seg_training_epochs=10,
     deconv_warmup_epochs=100,
 
@@ -286,10 +287,10 @@ model.train_model(dataset)
 
 The appropriate epoch number for training the CellART model may vary depending on the complexity of the dataset. Below are general guidelines for selecting the epoch parameters:
 
-1. **Large and Complex Datasets (default setting for most of the datasets in paper)**:
+1. **Large and Complex Datasets (conservative setting for the HD datasets)**:
    For datasets with diverse cell types or complex gene expression patterns (like more than 3K genes selected), use higher epoch numbers to ensure sufficient training:
    ```python
-   epoch = 400
+   epochs = 400
    seg_training_epochs = 15
    deconv_warmup_epochs = 200
    ```
@@ -298,11 +299,86 @@ The appropriate epoch number for training the CellART model may vary depending o
 2. **Simpler Datasets**:
    For datasets with simpler cell type compositions (e.g., fewer subtypes, fewer gene number), the model typically converges faster. In these cases, you can use lower epoch numbers:
    ```python
-   epoch = 200
+   epochs = 200
    seg_training_epochs = 10
    deconv_warmup_epochs = 100
    ```
 
+
+---
+
+### Running CellART without a Reference (NMF Mode)
+
+When no paired scRNA-seq reference is available, CellART can run in **NMF mode**: instead of using a fixed basis matrix derived from the reference, the model learns the factor-by-gene basis jointly during training. Enable it with `nmf=True` and set `factor_num` a little larger than the expected number of cell types in the tissue (e.g., if you expect around 15 cell types, use `factor_num=20`). In this mode, `basis.npy` and `celltype_names.txt` are not needed.
+
+#### Gene selection without a reference (VisiumHD)
+
+Without a reference, there is no reference-derived HVG list for building the gene map, so the genes must be selected from the spatial data itself. For VisiumHD, the **recommended** way is to directly select the top expressed genes in the 2 µm data (excluding mitochondrial genes). Continuing from the VisiumHD preprocessing example above (`st_preprocessor` created and `get_nuclei_segmentation()` finished):
+
+```python
+import numpy as np
+from cellart.utils.io import save_list
+
+# Top 3000 expressed genes in the 002um data (recommended)
+totals = np.asarray(st_preprocessor.adata.X.sum(axis=0)).ravel()
+var_names = list(st_preprocessor.adata.var_names)
+gene_list = []
+for i in np.argsort(totals)[::-1]:
+    g = var_names[i]
+    if g.upper().startswith("MT-"):  # exclude mitochondrial genes
+        continue
+    gene_list.append(g)
+    if len(gene_list) == 3000:
+        break
+save_list(gene_list, save_dir + "/filtered_gene_names.txt")
+
+st_preprocessor.prepare_sst(gene_list)
+```
+
+If the factors learned from the top expressed genes are not satisfactory, an alternative is to select highly variable genes from the **16 µm spots**, which are much less sparse than the 2 µm bins and therefore give a more stable HVG estimation:
+
+```python
+import scanpy as sc
+
+a16 = sc.read_10x_h5("/{YOUR_DATA_PATH}/square_016um/filtered_feature_bc_matrix.h5")
+a16.var_names_make_unique()
+a16 = a16[:, [g for g in a16.var_names if not g.upper().startswith("MT-")]].copy()
+sc.pp.filter_genes(a16, min_cells=1)
+sc.pp.highly_variable_genes(a16, flavor="seurat_v3", n_top_genes=3000)
+gene_list = [g for g in a16.var_names[a16.var["highly_variable"]]
+             if g in set(st_preprocessor.adata.var_names)]
+save_list(gene_list, save_dir + "/filtered_gene_names.txt")
+
+st_preprocessor.prepare_sst(gene_list)
+```
+
+#### Running in NMF mode
+
+```python
+manager = cellart.ExperimentManager(
+    # Basic input data settings (no basis / celltype_names needed)
+    gene_map=os.path.join(save_dir, "gene_map.npy"),
+    nuclei_mask=os.path.join(save_dir, "segmentation_mask.npy"),
+    gene_names=os.path.join(save_dir, "filtered_gene_names.txt"),
+    log_dir=log_dir,
+
+    # NMF mode
+    nmf=True,
+    factor_num=20,  # a little larger than the expected number of cell types
+
+    # Training parameters
+    epochs=400,
+    seg_training_epochs=15,
+    deconv_warmup_epochs=200,
+
+    pred_period=50,
+    gpu="0"
+)
+```
+
+In the output `cell_deconv.h5ad`, `obsm["deconv_beta"]` contains the per-cell factor loadings (factors are named `"0"`, `"1"`, ... in `uns["celltype_names"]`), and `uns["basis"]` stores the learned factor-by-gene basis, so each factor can be annotated afterwards through its top loading genes.
+
+> **_NOTE:_** To let NMF mode learn more detailed factors (e.g., rare cell types or fine subtypes), consider increasing the epoch number beyond the default guidance (e.g., `epochs=600` or more, scaling `deconv_warmup_epochs` accordingly to about half of `epochs`). This usually improves factor granularity, but can be time-consuming on large HD datasets.
 
 ---
 
