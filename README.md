@@ -64,9 +64,9 @@ $ pip install .
 
 ## Reference
 
-<!-- If you find the `CellART` package or any of the source code in this
-repository useful for your work, please cite: -->
-CellART is currently under review.
+If you use CellART in your research, please cite:
+
+Chen, Y., Liu, Y., Wang, Z. et al. **CellART: a unified framework for extracting single-cell information from high-resolution spatial transcriptomics.** *Nature Computational Science* (2026). https://doi.org/10.1038/s43588-026-01054-1
 
 ## Development
 
