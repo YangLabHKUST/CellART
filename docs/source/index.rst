@@ -17,7 +17,7 @@ spatial transcriptomics, staining images, and scRNA-seq references, to perform s
 CellART Manuscript
 ------------------
 
-coming soon...
+Chen, Y., Liu, Y., Wang, Z. et al. **CellART: a unified framework for extracting single-cell information from high-resolution spatial transcriptomics.** *Nature Computational Science* (2026). https://doi.org/10.1038/s43588-026-01054-1
 
 CellART Installation & Usage & Demo
 ------------------
